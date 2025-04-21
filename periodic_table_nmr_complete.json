@@ -1,0 +1,527 @@
+{
+    "0": {
+        "symbol": "H",
+        "name": "Hydrogen",
+        "atomic_number": 1,
+        "atomic_mass": 1.008,
+        "electronegativity": 2.2,
+        "melting_point": 14.01,
+        "boiling_point": 20.28,
+        "density": 8.988e-05,
+        "nmr_data": {
+            "spin": 0.5,
+            "gyromagnetic_ratio": 42.576,
+            "chemical_shift": "Varies based on bonding environment"
+        }
+    },
+    "1": {
+        "symbol": "He",
+        "name": "Helium",
+        "atomic_number": 2,
+        "atomic_mass": 4.0026,
+        "electronegativity": null,
+        "melting_point": 0.95,
+        "boiling_point": 4.22,
+        "density": 0.0001785,
+        "nmr_data": {
+            "spin": 0,
+            "gyromagnetic_ratio": null,
+            "chemical_shift": "N/A for NMR"
+        }
+    },
+    "01": {
+        "symbol": "Li",
+        "name": "Lithium",
+        "atomic_number": 3,
+        "atomic_mass": 6.94,
+        "electronegativity": 0.98,
+        "melting_point": 453.69,
+        "boiling_point": 1560,
+        "density": 0.534,
+        "nmr_data": {
+            "spin": 1.5,
+            "gyromagnetic_ratio": 16.546,
+            "chemical_shift": "Typically found in organolithium compounds"
+        }
+    },
+    "10": {
+        "symbol": "Be",
+        "name": "Beryllium",
+        "atomic_number": 4,
+        "atomic_mass": 9.0122,
+        "electronegativity": 1.57,
+        "melting_point": 1560,
+        "boiling_point": 2742,
+        "density": 1.85,
+        "nmr_data": {
+            "spin": 1.5,
+            "gyromagnetic_ratio": 5.6,
+            "chemical_shift": "Limited data available due to rarity in NMR studies"
+        }
+    },
+    "11": {
+        "symbol": "B",
+        "name": "Boron",
+        "atomic_number": 5,
+        "atomic_mass": 10.81,
+        "electronegativity": 2.04,
+        "melting_point": 2349,
+        "boiling_point": 4200,
+        "density": 2.34,
+        "nmr_data": {
+            "spin": 1.5,
+            "gyromagnetic_ratio": 10.74,
+            "chemical_shift": "Found in boron-containing compounds"
+        }
+    },
+    "101": {
+        "symbol": "C",
+        "name": "Carbon",
+        "atomic_number": 6,
+        "atomic_mass": 12.011,
+        "electronegativity": 2.55,
+        "melting_point": null,
+        "boiling_point": null,
+        "density": 2.267,
+        "nmr_data": {
+            "spin": 0.5,
+            "gyromagnetic_ratio": 10.705,
+            "chemical_shift": "Common in organic compounds"
+        }
+    },
+    "100": {
+        "symbol": "N",
+        "name": "Nitrogen",
+        "atomic_number": 7,
+        "atomic_mass": 14.007,
+        "electronegativity": 3.04,
+        "melting_point": 63.15,
+        "boiling_point": 77.36,
+        "density": 0.0012506,
+        "nmr_data": {
+            "spin": 1,
+            "gyromagnetic_ratio": -2.71,
+            "chemical_shift": "Varies in nitrogen compounds"
+        }
+    },
+    "111": {
+        "symbol": "O",
+        "name": "Oxygen",
+        "atomic_number": 8,
+        "atomic_mass": 15.999,
+        "electronegativity": 3.44,
+        "melting_point": 54.36,
+        "boiling_point": 90.2,
+        "density": 0.001429,
+        "nmr_data": {
+            "spin": 2.5,
+            "gyromagnetic_ratio": -5.77,
+            "chemical_shift": "Rarely observed in NMR"
+        }
+    },
+    "1010": {
+        "symbol": "F",
+        "name": "Fluorine",
+        "atomic_number": 9,
+        "atomic_mass": 18.998,
+        "electronegativity": 3.98,
+        "melting_point": 53.48,
+        "boiling_point": 85.03,
+        "density": 0.001696,
+        "nmr_data": {
+            "spin": 0.5,
+            "gyromagnetic_ratio": 40.08,
+            "chemical_shift": "Common in fluorinated compounds"
+        }
+    },
+    "1101": {
+        "symbol": "Ne",
+        "name": "Neon",
+        "atomic_number": 10,
+        "atomic_mass": 20.18,
+        "electronegativity": null,
+        "melting_point": 24.56,
+        "boiling_point": 27.07,
+        "density": 0.0008999,
+        "nmr_data": {
+            "spin": 0,
+            "gyromagnetic_ratio": null,
+            "chemical_shift": "N/A for NMR"
+        }
+    },
+    "1110": {
+        "symbol": "Na",
+        "name": "Sodium",
+        "atomic_number": 11,
+        "atomic_mass": 22.99,
+        "electronegativity": 0.93,
+        "melting_point": 370.95,
+        "boiling_point": 1156,
+        "density": 0.968,
+        "nmr_data": {
+            "spin": 1.5,
+            "gyromagnetic_ratio": 11.26,
+            "chemical_shift": "Common in ionic solutions"
+        }
+    },
+    "1100": {
+        "symbol": "Mg",
+        "name": "Magnesium",
+        "atomic_number": 12,
+        "atomic_mass": 24.305,
+        "electronegativity": 1.31,
+        "melting_point": 923,
+        "boiling_point": 1363,
+        "density": 1.738,
+        "nmr_data": {
+            "spin": 2.5,
+            "gyromagnetic_ratio": 2.6,
+            "chemical_shift": "Observed in organometallic compounds"
+        }
+    },
+    "11011": {
+        "symbol": "Al",
+        "name": "Aluminum",
+        "atomic_number": 13,
+        "atomic_mass": 26.982,
+        "electronegativity": 1.61,
+        "melting_point": 933.47,
+        "boiling_point": 2792,
+        "density": 2.7,
+        "nmr_data": {
+            "spin": 2.5,
+            "gyromagnetic_ratio": 6.69,
+            "chemical_shift": "Used in materials science and catalysis"
+        }
+    },
+    "11100": {
+        "symbol": "Si",
+        "name": "Silicon",
+        "atomic_number": 14,
+        "atomic_mass": 28.085,
+        "electronegativity": 1.9,
+        "melting_point": 1687,
+        "boiling_point": 3538,
+        "density": 2.329,
+        "nmr_data": {
+            "spin": 0.5,
+            "gyromagnetic_ratio": -8.46,
+            "chemical_shift": "Used in semiconductor research"
+        }
+    },
+    "1110111": {
+        "symbol": "Uue-119",
+        "name": "Ununennium-119",
+        "atomic_number": 119,
+        "atomic_mass": null,
+        "electronegativity": null,
+        "melting_point": null,
+        "boiling_point": null,
+        "density": null,
+        "nmr_data": {
+            "spin": null,
+            "gyromagnetic_ratio": null,
+            "chemical_shift": "Predicted but unknown"
+        }
+    },
+    "1111000": {
+        "symbol": "Uue-120",
+        "name": "Ununennium-120",
+        "atomic_number": 120,
+        "atomic_mass": null,
+        "electronegativity": null,
+        "melting_point": null,
+        "boiling_point": null,
+        "density": null,
+        "nmr_data": {
+            "spin": null,
+            "gyromagnetic_ratio": null,
+            "chemical_shift": "Predicted but unknown"
+        }
+    },
+    "1111001": {
+        "symbol": "Uue-121",
+        "name": "Ununennium-121",
+        "atomic_number": 121,
+        "atomic_mass": null,
+        "electronegativity": null,
+        "melting_point": null,
+        "boiling_point": null,
+        "density": null,
+        "nmr_data": {
+            "spin": null,
+            "gyromagnetic_ratio": null,
+            "chemical_shift": "Predicted but unknown"
+        }
+    },
+    "1111010": {
+        "symbol": "Uue-122",
+        "name": "Ununennium-122",
+        "atomic_number": 122,
+        "atomic_mass": null,
+        "electronegativity": null,
+        "melting_point": null,
+        "boiling_point": null,
+        "density": null,
+        "nmr_data": {
+            "spin": null,
+            "gyromagnetic_ratio": null,
+            "chemical_shift": "Predicted but unknown"
+        }
+    },
+    "1111011": {
+        "symbol": "Uue-123",
+        "name": "Ununennium-123",
+        "atomic_number": 123,
+        "atomic_mass": null,
+        "electronegativity": null,
+        "melting_point": null,
+        "boiling_point": null,
+        "density": null,
+        "nmr_data": {
+            "spin": null,
+            "gyromagnetic_ratio": null,
+            "chemical_shift": "Predicted but unknown"
+        }
+    },
+    "1111100": {
+        "symbol": "Uue-124",
+        "name": "Ununennium-124",
+        "atomic_number": 124,
+        "atomic_mass": null,
+        "electronegativity": null,
+        "melting_point": null,
+        "boiling_point": null,
+        "density": null,
+        "nmr_data": {
+            "spin": null,
+            "gyromagnetic_ratio": null,
+            "chemical_shift": "Predicted but unknown"
+        }
+    },
+    "1111101": {
+        "symbol": "Uue-125",
+        "name": "Ununennium-125",
+        "atomic_number": 125,
+        "atomic_mass": null,
+        "electronegativity": null,
+        "melting_point": null,
+        "boiling_point": null,
+        "density": null,
+        "nmr_data": {
+            "spin": null,
+            "gyromagnetic_ratio": null,
+            "chemical_shift": "Predicted but unknown"
+        }
+    },
+    "1111110": {
+        "symbol": "Uue-126",
+        "name": "Ununennium-126",
+        "atomic_number": 126,
+        "atomic_mass": null,
+        "electronegativity": null,
+        "melting_point": null,
+        "boiling_point": null,
+        "density": null,
+        "nmr_data": {
+            "spin": null,
+            "gyromagnetic_ratio": null,
+            "chemical_shift": "Predicted but unknown"
+        }
+    },
+    "1111111": {
+        "symbol": "Uue-127",
+        "name": "Ununennium-127",
+        "atomic_number": 127,
+        "atomic_mass": null,
+        "electronegativity": null,
+        "melting_point": null,
+        "boiling_point": null,
+        "density": null,
+        "nmr_data": {
+            "spin": null,
+            "gyromagnetic_ratio": null,
+            "chemical_shift": "Predicted but unknown"
+        }
+    },
+    "10000000": {
+        "symbol": "Uue-128",
+        "name": "Ununennium-128",
+        "atomic_number": 128,
+        "atomic_mass": null,
+        "electronegativity": null,
+        "melting_point": null,
+        "boiling_point": null,
+        "density": null,
+        "nmr_data": {
+            "spin": null,
+            "gyromagnetic_ratio": null,
+            "chemical_shift": "Predicted but unknown"
+        }
+    },
+    "10000001": {
+        "symbol": "Uue-129",
+        "name": "Ununennium-129",
+        "atomic_number": 129,
+        "atomic_mass": null,
+        "electronegativity": null,
+        "melting_point": null,
+        "boiling_point": null,
+        "density": null,
+        "nmr_data": {
+            "spin": null,
+            "gyromagnetic_ratio": null,
+            "chemical_shift": "Predicted but unknown"
+        }
+    },
+    "10000010": {
+        "symbol": "Uue-130",
+        "name": "Ununennium-130",
+        "atomic_number": 130,
+        "atomic_mass": null,
+        "electronegativity": null,
+        "melting_point": null,
+        "boiling_point": null,
+        "density": null,
+        "nmr_data": {
+            "spin": null,
+            "gyromagnetic_ratio": null,
+            "chemical_shift": "Predicted but unknown"
+        }
+    },
+    "10000011": {
+        "symbol": "Uue-131",
+        "name": "Ununennium-131",
+        "atomic_number": 131,
+        "atomic_mass": null,
+        "electronegativity": null,
+        "melting_point": null,
+        "boiling_point": null,
+        "density": null,
+        "nmr_data": {
+            "spin": null,
+            "gyromagnetic_ratio": null,
+            "chemical_shift": "Predicted but unknown"
+        }
+    },
+    "10000100": {
+        "symbol": "Uue-132",
+        "name": "Ununennium-132",
+        "atomic_number": 132,
+        "atomic_mass": null,
+        "electronegativity": null,
+        "melting_point": null,
+        "boiling_point": null,
+        "density": null,
+        "nmr_data": {
+            "spin": null,
+            "gyromagnetic_ratio": null,
+            "chemical_shift": "Predicted but unknown"
+        }
+    },
+    "10000101": {
+        "symbol": "Uue-133",
+        "name": "Ununennium-133",
+        "atomic_number": 133,
+        "atomic_mass": null,
+        "electronegativity": null,
+        "melting_point": null,
+        "boiling_point": null,
+        "density": null,
+        "nmr_data": {
+            "spin": null,
+            "gyromagnetic_ratio": null,
+            "chemical_shift": "Predicted but unknown"
+        }
+    },
+    "10000110": {
+        "symbol": "Uue-134",
+        "name": "Ununennium-134",
+        "atomic_number": 134,
+        "atomic_mass": null,
+        "electronegativity": null,
+        "melting_point": null,
+        "boiling_point": null,
+        "density": null,
+        "nmr_data": {
+            "spin": null,
+            "gyromagnetic_ratio": null,
+            "chemical_shift": "Predicted but unknown"
+        }
+    },
+    "10000111": {
+        "symbol": "Uue-135",
+        "name": "Ununennium-135",
+        "atomic_number": 135,
+        "atomic_mass": null,
+        "electronegativity": null,
+        "melting_point": null,
+        "boiling_point": null,
+        "density": null,
+        "nmr_data": {
+            "spin": null,
+            "gyromagnetic_ratio": null,
+            "chemical_shift": "Predicted but unknown"
+        }
+    },
+    "10001000": {
+        "symbol": "Uue-136",
+        "name": "Ununennium-136",
+        "atomic_number": 136,
+        "atomic_mass": null,
+        "electronegativity": null,
+        "melting_point": null,
+        "boiling_point": null,
+        "density": null,
+        "nmr_data": {
+            "spin": null,
+            "gyromagnetic_ratio": null,
+            "chemical_shift": "Predicted but unknown"
+        }
+    },
+    "10001001": {
+        "symbol": "Uue-137",
+        "name": "Ununennium-137",
+        "atomic_number": 137,
+        "atomic_mass": null,
+        "electronegativity": null,
+        "melting_point": null,
+        "boiling_point": null,
+        "density": null,
+        "nmr_data": {
+            "spin": null,
+            "gyromagnetic_ratio": null,
+            "chemical_shift": "Predicted but unknown"
+        }
+    },
+    "10001010": {
+        "symbol": "Uue-138",
+        "name": "Ununennium-138",
+        "atomic_number": 138,
+        "atomic_mass": null,
+        "electronegativity": null,
+        "melting_point": null,
+        "boiling_point": null,
+        "density": null,
+        "nmr_data": {
+            "spin": null,
+            "gyromagnetic_ratio": null,
+            "chemical_shift": "Predicted but unknown"
+        }
+    },
+    "10001011": {
+        "symbol": "Uue-139",
+        "name": "Ununennium-139",
+        "atomic_number": 139,
+        "atomic_mass": null,
+        "electronegativity": null,
+        "melting_point": null,
+        "boiling_point": null,
+        "density": null,
+        "nmr_data": {
+            "spin": null,
+            "gyromagnetic_ratio": null,
+            "chemical_shift": "Predicted but unknown"
+        }
+    }
+}

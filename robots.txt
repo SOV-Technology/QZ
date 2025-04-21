@@ -1,0 +1,5 @@
+User-agent: *
+Disallow:
+
+# This allows all search engines and bots full access to the website
+Allow: /

@@ -1,0 +1,62 @@
+{
+    "0": {
+        "symbol": "H",
+        "name": "Hydrogen",
+        "atomic_number": 1,
+        "atomic_mass": 1.008,
+        "electronegativity": 2.2,
+        "melting_point": 14.01,
+        "boiling_point": 20.28,
+        "density": 8.988e-05,
+        "nmr_data": {
+            "spin": 0.5,
+            "gyromagnetic_ratio": 42.576,
+            "chemical_shift": "Varies based on bonding environment"
+        }
+    },
+    "1": {
+        "symbol": "He",
+        "name": "Helium",
+        "atomic_number": 2,
+        "atomic_mass": 4.0026,
+        "electronegativity": null,
+        "melting_point": 0.95,
+        "boiling_point": 4.22,
+        "density": 0.0001785,
+        "nmr_data": {
+            "spin": 0,
+            "gyromagnetic_ratio": null,
+            "chemical_shift": "N/A for NMR"
+        }
+    },
+    "2": {
+        "symbol": "Li",
+        "name": "Lithium",
+        "atomic_number": 3,
+        "atomic_mass": 6.94,
+        "electronegativity": 0.98,
+        "melting_point": 453.69,
+        "boiling_point": 1560,
+        "density": 0.534,
+        "nmr_data": {
+            "spin": 1.5,
+            "gyromagnetic_ratio": 16.546,
+            "chemical_shift": "Typically found in organolithium compounds"
+        }
+    },
+    "3": {
+        "symbol": "Be",
+        "name": "Beryllium",
+        "atomic_number": 4,
+        "atomic_mass": 9.0122,
+        "electronegativity": 1.57,
+        "melting_point": 1560,
+        "boiling_point": 2742,
+        "density": 1.85,
+        "nmr_data": {
+            "spin": 1.5,
+            "gyromagnetic_ratio": 5.6,
+            "chemical_shift": "Limited data available due to rarity in NMR studies"
+        }
+    }
+}

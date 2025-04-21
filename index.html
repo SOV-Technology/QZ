@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Sensory Simulation using Proton Fusion Model</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            display: flex;
+            margin: 0;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+        }
+        .php-container {
+            width: 75%;
+            height: 100%;
+            border-right: 2px solid #ccc;
+        }
+        .json-container {
+            width: 25%;
+            height: 100%;
+            overflow: auto;
+            padding: 10px;
+            background-color: #f8f9fa;
+        }
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+<body>
+    <div class="php-container">
+        <iframe src="index.php"></iframe>
+    </div>
+    <div class="json-container">
+        <h5>NMR/Periodic Model &nbsp;<a href="full_periodic_table_updated.json" download>Download JSON</a></h5>
+        <pre id="json-display"></pre>
+    </div>
+
+    <script>
+        fetch('full_periodic_table_updated.json')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('json-display').textContent = JSON.stringify(data, null, 4);
+            })
+            .catch(error => console.error('Error loading JSON:', error));
+    </script>
+</body>
+</html>
