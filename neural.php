@@ -3,6 +3,17 @@ declare(strict_types=1);
 
 // Neural Signal Hub (NOVA14 Sync) - With Merged Log Visualization and Neural Network
 // Full PF-linked signal processor with adaptive config + 2-way binding + merged-log memory sync
+// Version 2.0 with Glyphbook Integration
+
+// Configuration
+define('GLYPHBOOK_FILE', 'glyphbook.json');
+define('MERGED_LOG_FILE', 'merged-log.json');
+define('BACKUP_DIR', 'backups/');
+
+// Ensure backup directory exists
+if (!file_exists(BACKUP_DIR)) {
+    mkdir(BACKUP_DIR, 0755, true);
+}
 
 /**
  * Load JSON log file with error handling
@@ -33,15 +44,54 @@ function load_log(string $file): array {
  */
 function append_to_merged_log(array $entry, string $source): void {
     if (!isset($entry['timestamp'])) {
-        $entry['timestamp'] = date('Y-m-d H:i:s');
+        $entry['timestamp'] = date('c');
     }
 
-    $log = load_log('merged-log.json');
+    $log = load_log(MERGED_LOG_FILE);
     $entry['source'] = $source;
     $log[] = $entry;
     
-    if (file_put_contents('merged-log.json', json_encode($log, JSON_PRETTY_PRINT)) === false) {
+    if (file_put_contents(MERGED_LOG_FILE, json_encode($log, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE)) === false) {
         error_log("Failed to write merged log");
+    }
+}
+
+/**
+ * Sync with Glyphbook system
+ */
+function sync_with_glyphbook(array $entry): void {
+    if (!isset($entry['title'], $entry['message'])) return;
+    
+    $glyphs = load_log(GLYPHBOOK_FILE);
+    
+    // Check if this entry already exists in glyphbook
+    $exists = false;
+    foreach ($glyphs as $glyph) {
+        if ($glyph['title'] === $entry['title'] && $glyph['quote'] === $entry['message']) {
+            $exists = true;
+            break;
+        }
+    }
+    
+    if (!$exists) {
+        $newGlyph = [
+            'timestamp' => $entry['timestamp'],
+            'title' => $entry['title'],
+            'quote' => $entry['message'],
+            'elements' => ['Neural', 'Signal'],
+            'emotion' => $entry['emotion'] ?? 'Unspecified',
+            'form' => 'Neural',
+            'echo' => $entry['response'] ?? '',
+            'parallel' => $entry['output'] ?? '',
+            'phase' => 'NOVA-Neural'
+        ];
+        
+        // Create backup before saving
+        $backupFile = BACKUP_DIR . basename(GLYPHBOOK_FILE) . '.' . date('Ymd-His');
+        copy(GLYPHBOOK_FILE, $backupFile);
+        
+        $glyphs[] = $newGlyph;
+        file_put_contents(GLYPHBOOK_FILE, json_encode($glyphs, JSON_PRETTY_PRINT));
     }
 }
 
@@ -122,25 +172,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['signal_message'])) {
 
     // Create and store new log entry
     $log_entry = [
-        'timestamp' => date('Y-m-d H:i:s'),
+        'timestamp' => date('c'),
         'glyph' => '🔗-Neural-' . date('His'),
         'emotion' => 'Sync',
         'tag' => 'Recursion',
         'message' => $raw,
         'response' => 'Neural signal integrated.',
-        'output' => $output
+        'output' => $output,
+        'title' => 'Neural Signal ' . date('Y-m-d H:i:s')
     ];
     
     $signal_log[] = $log_entry;
     file_put_contents('signal_log.json', json_encode($signal_log, JSON_PRETTY_PRINT));
     append_to_merged_log($log_entry, 'neural');
+    sync_with_glyphbook($log_entry);
 }
 
 /**
  * Render all merged log entries
  */
 function render_merged_logs(): string {
-    $merged_log = load_log('merged-log.json');
+    $merged_log = load_log(MERGED_LOG_FILE);
     $output = "<div class='merged-logs-container'><h2>All Merged Log Entries</h2>";
 
     foreach (array_reverse($merged_log) as $entry) {
@@ -368,6 +420,8 @@ function render_merged_logs(): string {
         <input type="submit" value="Send Signal">
     </form>
 
+    <?php include 'neural-bundle-upgrade.php'; ?>
+
     <!-- Neural Network Visualization -->
     <div id="neural-network"></div>
     <div id="network-stats"></div>
@@ -378,7 +432,9 @@ function render_merged_logs(): string {
 
     <?= render_merged_logs() ?>
 
-    <p class="footer-note">Recursive memory established. Feedback sync active.</p>
+    <p class="footer-note">Recursive memory established. Feedback sync active. Glyphbook integration: <?= 
+        file_exists(GLYPHBOOK_FILE) ? '✅ Active' : '⚠️ Inactive' 
+    ?></p>
 
     <script>
         const scope = {};
@@ -467,6 +523,10 @@ function render_merged_logs(): string {
                 <div class="stat-card">
                     <div class="stat-value">${Object.keys(stats.tags).length}</div>
                     <div>Categories</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">${stats.lastActivity ? new Date(stats.lastActivity).toLocaleString() : 'N/A'}</div>
+                    <div>Last Activity</div>
                 </div>
             `;
 

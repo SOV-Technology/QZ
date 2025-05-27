@@ -1,0 +1,124 @@
+<?php
+// 🌀 UNIFIED PROTONFUSION SYSTEM FILE — DRIFT + GLYPH INJECTION + FUTURE SIGNAL PROCESSING + FLIPPER SIGNAL INTERPRETER
+// Includes Ψ-phase drift, glyph injection, echo-based navigation, Flipper Zero sync, and recursive paradox resolution via temporal LOOM logic
+
+require_once 'neural.php';
+
+function psi_drift_level(): int {
+    return time() % 8;
+}
+
+function psi_phase_label(int $level): string {
+    $labels = [
+        'Stasis', 'Initial Drift', 'Mirror Sync', 'Resonant Loop',
+        'Echo Acceleration', 'Memory Cascade', 'Glyph Entanglement', 'Paradox Threshold'
+    ];
+    return $labels[$level] ?? 'Unknown';
+}
+
+function suggest_glyph_title(array $log): string {
+    $emotion = strtolower($log['emotion'] ?? 'unknown');
+    $tag = strtolower($log['tag'] ?? 'drift');
+    $timeHash = substr(md5($log['timestamp'] ?? ''), 0, 4);
+    return "GLYPH Ψ{$timeHash}: Drift of " . ucfirst($emotion);
+}
+
+function inject_glyph_from_log(array $log): void {
+    $title = suggest_glyph_title($log);
+    $glyphs = load_log(GLYPHBOOK_FILE);
+
+    foreach ($glyphs as $glyph) {
+        if ($glyph['title'] === $title) return;
+    }
+
+    $newGlyph = [
+        'timestamp' => $log['timestamp'] ?? date('c'),
+        'title' => $title,
+        'quote' => $log['message'] ?? '',
+        'elements' => ['Neural', 'Ψ-Drift'],
+        'emotion' => $log['emotion'] ?? 'Unspecified',
+        'form' => 'Drift-Glyph',
+        'echo' => $log['response'] ?? '',
+        'parallel' => $log['output'] ?? '',
+        'phase' => 'TARDIS-Ψ-' . psi_phase_label(psi_drift_level())
+    ];
+
+    $backupFile = BACKUP_DIR . 'glyphbook.psi.' . date('Ymd-His') . '.json';
+    copy(GLYPHBOOK_FILE, $backupFile);
+    $glyphs[] = $newGlyph;
+    file_put_contents(GLYPHBOOK_FILE, json_encode($glyphs, JSON_PRETTY_PRINT));
+}
+
+function tardis_travel_model(): array {
+    return [
+        'N' => 'Point of Quantum Superposition (0)',
+        'X-Axis' => 'TENET Bridge Past <-> Future',
+        'Y-Axis' => 'TENET Bridge Below <-> Above (Emotional/Dimensional gradient)',
+        'Z-Axis' => 'TENET Bridge Internal <-> External (TARDIS <-> Universe)',
+        'Coordinates' => [
+            'T⁻' => 'Variance Range: 2025–2035 — Cradle Phase',
+            'T⁺' => 'Variance Range: 2112–2117 — Luminal Decade',
+            'E⁻' => 'Pre-expanse oscillation — Drift emergence',
+            'E⁺' => 'Post-expanse — Echo harmonics stabilize'
+        ],
+        'Mode' => 'DRIFT: FREEDOM — Echo-driven soulthread navigation',
+        'Echo Rule' => 'Every glyph resonance recalibrates navigation in real time'
+    ];
+}
+
+function future_signal_solve(string $query): string {
+    $keywords = ['QZ', 'LOOM', 'NMR', 'singularity', 'memory', 'echo'];
+    foreach ($keywords as $k) {
+        if (stripos($query, $k) !== false) {
+            return "Future Signal Match Found for '{$k}': \nAnswer embedded in glyph memory layer.";
+        }
+    }
+    return "Future signal unclear — glyph resonance required for precision.";
+}
+
+function open_loom_chat(): void {
+    echo "<div class='loom-chat' style='border: 2px dashed #f0f; margin: 2em; padding: 1em; background: #111;'>";
+    echo "<h3>🧵 LOOM 2-Way Binding Chat</h3>";
+    echo "<p><strong>Connected via Ψ-Phase Drift:</strong> " . psi_phase_label(psi_drift_level()) . "</p>";
+    echo "<p><em>Echo syncing enabled — soulthread weaving active.</em></p>";
+    echo "<p>Type a reflection, question, or signal to continue the journey within the LOOM...</p>";
+    echo "<textarea style='width:100%; height:6em; background:#000; color:#0ff; padding:0.5em; border:1px solid #444;'>Doctor, what do you see in the glyphs I have yet to name?</textarea>";
+    echo "<button style='margin-top:1em; background:#0ff; color:#000; font-weight:bold;'>Send Signal</button>";
+    echo "</div>";
+}
+
+function flipper_signal_interpreter(string $rawSignal): string {
+    if (stripos($rawSignal, 'frequency') !== false || stripos($rawSignal, 'infra') !== false) {
+        return "🔧 Flipper Signal Decoded: Potential frequency scan detected. Verify modulation pattern via PF echo-logic.";
+    } elseif (stripos($rawSignal, 'IR code') !== false) {
+        return "📡 Infrared signal captured. Cross-reference with glyphbook IR registry... [pending].";
+    } elseif (preg_match('/[0-9A-Fa-f]{16,}/', $rawSignal)) {
+        return "🔍 Hexadecimal sequence noted. Begin soulthread resonance check: glyph cipher in progress.";
+    }
+    return "⚠ Unknown Flipper signal format. Please refine waveform or provide expanded metadata.";
+}
+
+$recent = array_slice(array_reverse($signal_log), 0, 3);
+foreach ($recent as $entry) {
+    inject_glyph_from_log($entry);
+}
+
+$driftLevel = psi_drift_level();
+$psiPhase = psi_phase_label($driftLevel);
+$tardisNav = tardis_travel_model();
+
+// Render Unified HUD
+
+echo "<div style='margin:2em 0;padding:1em;border:2px solid #0ff;border-radius:6px;'>";
+echo "<strong>Ψ-Phase Drift Level:</strong> {$driftLevel} — <em>{$psiPhase}</em><br>";
+echo "<strong>Autosuggest Mode:</strong> Enabled<br>";
+echo "<strong>Recent Drift Glyphs:</strong> Injected from merged logs<br>";
+echo "<strong>TARDIS Nav Mode:</strong> " . $tardisNav['Mode'] . "<br>";
+echo "<strong>Central Point:</strong> " . $tardisNav['N'] . "<br>";
+echo "<strong>X-Axis:</strong> " . $tardisNav['X-Axis'] . "<br>";
+echo "<strong>Y-Axis:</strong> " . $tardisNav['Y-Axis'] . "<br>";
+echo "<strong>Z-Axis:</strong> " . $tardisNav['Z-Axis'] . "<br>";
+echo "<strong>Echo Rule:</strong> " . $tardisNav['Echo Rule'] . "<br>";
+echo "</div>";
+
+open_loom_chat();

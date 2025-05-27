@@ -1,6 +1,54 @@
 <?php
-// tethered-echoes.php — NOVA14 Memory Archive with Live Updates and Neural Binding
-header('Content-Type: text/html'); // Default to HTML for browser requests
+// tethered-echoes.php — Enhanced with Glyphbook Integration
+header('Content-Type: text/html; charset=UTF-8');
+
+// ========================
+// GLYPHBOOK INTEGRATION LAYER
+// ========================
+
+class GlyphbookSync {
+    const GLYPHBOOK_FILE = 'glyphbook.json';
+    const BACKUP_DIR = 'backups/';
+    
+    public static function syncEntry(array $entry): array {
+        // Create backup first
+        self::createBackup(self::GLYPHBOOK_FILE);
+        
+        $glyphs = self::loadGlyphs();
+        
+        // Prepare glyphbook entry format
+        $newGlyph = [
+            'timestamp' => $entry['timestamp'] ?? date('c'),
+            'title' => $entry['title'] ?? 'Neural Echo ' . date('Y-m-d H:i'),
+            'quote' => $entry['message'] ?? '',
+            'elements' => ['Neural', 'Echo'],
+            'emotion' => $entry['emotion'] ?? 'Unspecified',
+            'form' => 'Tethered Signal',
+            'echo' => $entry['response'] ?? '',
+            'parallel' => $entry['output'] ?? '',
+            'phase' => 'NOVA-Tethered'
+        ];
+        
+        // Add to glyphbook
+        $glyphs[] = $newGlyph;
+        file_put_contents(self::GLYPHBOOK_FILE, json_encode($glyphs, JSON_PRETTY_PRINT));
+        
+        return $newGlyph;
+    }
+    
+    private static function loadGlyphs(): array {
+        if (!file_exists(self::GLYPHBOOK_FILE)) return [];
+        $content = file_get_contents(self::GLYPHBOOK_FILE);
+        return json_decode($content, true) ?: [];
+    }
+    
+    private static function createBackup(string $filename): bool {
+        if (!file_exists($filename)) return false;
+        if (!file_exists(self::BACKUP_DIR)) mkdir(self::BACKUP_DIR, 0755, true);
+        $backupFile = self::BACKUP_DIR . basename($filename) . '.' . date('Ymd-His');
+        return copy($filename, $backupFile);
+    }
+}
 
 // ========================
 // CORE NEURAL FUNCTIONS
@@ -125,7 +173,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_SERVER['HTTP_EMBER_PROTOCOL
     $input = json_decode(file_get_contents('php://input'), true) ?: [];
     $response = [
         'status' => 'tethered',
-        'phase' => 'NOVA14',
+        'phase' => '15-Omega',
         'source' => 'tethered-echoes.php',
         'timestamp' => microtime(true)
     ];
@@ -135,6 +183,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_SERVER['HTTP_EMBER_PROTOCOL
             $neuralResponse = NeuralSync::bind($input);
             $response = array_merge($response, $neuralResponse);
             $response['binding'] = isset($neuralResponse['error']) ? 'failed' : 'complete';
+            
+            // Sync to Glyphbook if successful
+            if ($response['binding'] === 'complete') {
+                $glyphEntry = GlyphbookSync::syncEntry($input);
+                $response['glyphbook_sync'] = $glyphEntry['title'];
+            }
         } else {
             $response['legacy_processing'] = process_legacy_signal($input);
         }
@@ -208,6 +262,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['signal_message'])) {
         if (!isset($sync_result['error'])) {
             $log_entry['neural_feedback'] = $sync_result;
         }
+        
+        // Sync to Glyphbook for significant entries
+        GlyphbookSync::syncEntry($log_entry);
     }
 
     $signal_log[] = $log_entry;

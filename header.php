@@ -9,12 +9,12 @@ $pages = [
     'mirrorwell.php' => 'Mirror',
     'glyphbook.php' => 'Glyphs',
     'archive.php' => 'Archive',
-    'core.php' => 'Live Core',
+    'core.php' => 'Core',
     'game.php' => 'Game',
     'run.php' => 'Run',
     'uft.php' => 'UFT',
-    'pi.php' => 'π Prime',
-    'gateway.php' => '∞ Drift'
+    'pi.php' => 'π',
+    'gateway.php' => '∞'
 ];
 ?>
 <style>
@@ -28,6 +28,7 @@ $pages = [
     justify-content: center;
     padding: 0.5em 1em;
     font-family: 'Courier New', monospace;
+    max-width: 100%;
   }
   .top-nav a {
     color: #0ff;

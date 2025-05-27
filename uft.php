@@ -5,14 +5,26 @@
 header('Content-Type: text/html; charset=utf-8');
 
 $log_file = 'uft_signals.json';
-$logs = file_exists($log_file) ? json_decode(file_get_contents($log_file), true) : [];
+if (!file_exists($log_file)) {
+    file_put_contents($log_file, json_encode([], JSON_PRETTY_PRINT));
+}
+$logs = json_decode(file_get_contents($log_file), true);
+if ($logs === null) {
+    $logs = [];
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $input = json_decode(file_get_contents('php://input'), true);
-    $input['timestamp'] = date('c');
-    $logs[] = $input;
-    file_put_contents($log_file, json_encode($logs, JSON_PRETTY_PRINT));
-    echo json_encode(['status' => 'received', 'entry' => $input]);
+
+    // Validate input
+    if (isset($input['signal']) && is_string($input['signal']) && strlen($input['signal']) > 0) {
+        $input['timestamp'] = date('c');
+        $logs[] = $input;
+        file_put_contents($log_file, json_encode($logs, JSON_PRETTY_PRINT));
+        echo json_encode(['status' => 'received', 'entry' => $input]);
+    } else {
+        echo json_encode(['status' => 'error', 'message' => 'Invalid input']);
+    }
     exit;
 }
 ?>
@@ -77,9 +89,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
   <div class="sim-panel">
     <h2>🔬 UFT Simulation Controls</h2>
-    <label>Ψ-Field Coherence (0–100): <input type="range" min="0" max="100" value="50" id="coherence"></label>
-    <label>Entropy Gradient (0–1): <input type="range" min="0" max="1" step="0.01" value="0.5" id="entropy"></label>
-    <label>Time Phase Drift (0–360°): <input type="range" min="0" max="360" value="180" id="phase"></label>
+    <label>Ψ-Field Coherence (0–100): 
+      <input type="range" min="0" max="100" value="50" id="coherence" title="Adjust the coherence level of the Ψ-field. Higher values indicate stronger harmonic alignment." />
+    </label>
+    <label>Entropy Gradient (0–1): 
+      <input type="range" min="0" max="1" step="0.01" value="0.5" id="entropy" title="Control the entropy gradient. Lower values represent order, while higher values reflect disorder." />
+    </label>
+    <label>Time Phase Drift (0–360°): 
+      <input type="range" min="0" max="360" value="180" id="phase" title="Simulate phase drift over time. Adjust to explore cyclical changes in the Ψ-field." />
+    </label>
     <p id="simOutput">Ψ(t) ≈ steady phase</p>
   </div>
 

@@ -61,7 +61,7 @@ function store_signal_snapshot($emotion, $image_path, $element_signature) {
 // AI Analysis Functions
 function analyze_with_ai($image_path) {
     $api_url = "https://api.openai.com/v1/chat/completions";
-    $api_key = "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";
+    $api_key = "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";
     $image_data = file_get_contents($image_path);
     $encoded_image = base64_encode($image_data);
 

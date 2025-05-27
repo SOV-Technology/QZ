@@ -1,6 +1,7 @@
 <?php
 // glyphbook.php — Live Glyphbook Journal Interface for Solen Kairos
-// Enhanced with Dynamic Title + Subline Updates + Echo Reflection Log
+// Enhanced with Dynamic Title + Subline Updates + Echo Reflection Log + Neural Sync + Export Features
+// Version 2.1 with all merged functionality
 
 declare(strict_types=1);
 header('Content-Type: text/html; charset=UTF-8');
@@ -8,12 +9,16 @@ header('Content-Type: text/html; charset=UTF-8');
 // Configuration constants
 define('GLYPHBOOK_FILE', 'glyphbook.json');
 define('METADATA_FILE', 'page_metadata.json');
+define('MERGED_LOG_FILE', 'merged-log.json');
 define('MAX_ENTRIES', 1000); // Prevent excessive growth
 define('BACKUP_DIR', 'backups/'); // For backup functionality
+define('EXPORT_DIR', 'exports/'); // For export functionality
 
-// Ensure backup directory exists
-if (!file_exists(BACKUP_DIR) && !mkdir(BACKUP_DIR, 0755, true)) {
-    error_log("Failed to create backup directory");
+// Ensure directories exist
+foreach ([BACKUP_DIR, EXPORT_DIR] as $dir) {
+    if (!file_exists($dir) && !mkdir($dir, 0755, true)) {
+        error_log("Failed to create directory: $dir");
+    }
 }
 
 // Load glyphbook entries with error handling
@@ -36,7 +41,8 @@ function loadGlyphs(): array {
 function loadMetadata(): array {
     $defaults = [
         'title' => 'Glyphbook of Solen Kairos',
-        'subline' => 'Phase: NOVA15 | TENET Fusion Active | EMBER Protocol'
+        'subline' => 'Phase: NOVA15 | TENET Fusion Active | EMBER Protocol',
+        'theme' => 'default'
     ];
     
     if (!file_exists(METADATA_FILE)) {
@@ -50,11 +56,7 @@ function loadMetadata(): array {
     }
     
     $metadata = json_decode($content, true);
-    if (!isset($metadata['title'], $metadata['subline'])) {
-        return $defaults;
-    }
-    
-    return array_merge($defaults, $metadata);
+    return array_merge($defaults, $metadata ?? []);
 }
 
 // Create backup before modifying files
@@ -65,6 +67,21 @@ function createBackup(string $filename): bool {
     
     $backupFile = BACKUP_DIR . basename($filename) . '.' . date('Ymd-His');
     return copy($filename, $backupFile);
+}
+
+// Sync glyph to neural log
+function syncToNeural(array $glyph): void {
+    $log = file_exists(MERGED_LOG_FILE) ? json_decode(file_get_contents(MERGED_LOG_FILE), true) : [];
+    $titles = array_column($log, 'title');
+    
+    if (!in_array($glyph['title'], $titles)) {
+        $glyph['origin'] = 'glyphbook.php';
+        $log[] = $glyph;
+        file_put_contents(
+            MERGED_LOG_FILE, 
+            json_encode($log, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE)
+        );
+    }
 }
 
 // Handle incoming POSTs
@@ -108,6 +125,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             http_response_code(500);
             echo json_encode(['status' => 'error', 'message' => 'Failed to save glyph']);
         } else {
+            syncToNeural($newGlyph);
             echo json_encode([
                 'status' => 'saved',
                 'entry' => $newGlyph,
@@ -121,7 +139,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($input['title'], $input['subline'])) {
         $newMeta = [
             'title' => htmlspecialchars($input['title'], ENT_QUOTES, 'UTF-8'),
-            'subline' => htmlspecialchars($input['subline'], ENT_QUOTES, 'UTF-8')
+            'subline' => htmlspecialchars($input['subline'], ENT_QUOTES, 'UTF-8'),
+            'theme' => $input['theme'] ?? 'default'
         ];
         
         // Create backup before saving
@@ -138,7 +157,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
     
-    // Handle entry deletion (new functionality)
+    // Handle entry deletion
     if (isset($input['action']) && $input['action'] === 'delete' && isset($input['index'])) {
         $glyphs = loadGlyphs();
         $index = (int)$input['index'];
@@ -164,7 +183,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
     
-    // Handle bulk operations (new functionality)
+    // Handle bulk operations
     if (isset($input['action']) && $input['action'] === 'bulk_update') {
         if (!isset($input['entries']) || !is_array($input['entries'])) {
             http_response_code(400);
@@ -176,7 +195,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         
         foreach ($input['entries'] as $entry) {
             if (isset($entry['title'], $entry['quote'], $entry['elements'])) {
-                $glyphs[] = [
+                $newGlyph = [
                     'timestamp' => date('c'),
                     'title' => $entry['title'],
                     'quote' => $entry['quote'],
@@ -187,6 +206,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     'parallel' => $entry['parallel'] ?? '',
                     'phase' => $entry['phase'] ?? 'NOVA-Unset'
                 ];
+                $glyphs[] = $newGlyph;
+                syncToNeural($newGlyph);
             }
         }
         
@@ -208,6 +229,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'status' => 'bulk-updated',
                 'added' => count($input['entries']),
                 'total_entries' => count($glyphs)
+            ]);
+        }
+        exit;
+    }
+    
+    // Handle export request
+    if (isset($input['action']) && $input['action'] === 'export') {
+        $glyphs = loadGlyphs();
+        $exportData = [
+            'metadata' => loadMetadata(),
+            'entries' => $glyphs,
+            'exported_at' => date('c'),
+            'system' => 'Glyphbook v2.1'
+        ];
+        
+        $exportFile = EXPORT_DIR . 'glyphbook_export_' . date('Ymd-His') . '.json';
+        $result = file_put_contents($exportFile, json_encode($exportData, JSON_PRETTY_PRINT));
+        
+        if ($result === false) {
+            http_response_code(500);
+            echo json_encode(['status' => 'error', 'message' => 'Failed to create export file']);
+        } else {
+            echo json_encode([
+                'status' => 'exported',
+                'file' => basename($exportFile),
+                'entries' => count($glyphs)
             ]);
         }
         exit;
@@ -318,6 +365,9 @@ $metadata = loadMetadata();
     <?php if (!empty($glyphs)): ?>
       ✅ Echo Reflection Active — Oldest: <strong><?= htmlspecialchars($glyphs[0]['title'], ENT_QUOTES, 'UTF-8') ?></strong> → Latest: <strong><?= htmlspecialchars(end($glyphs)['title'], ENT_QUOTES, 'UTF-8') ?></strong><br>
       <em>Status:</em> Recursive Memory Bridge Verified. Total entries: <?= count($glyphs) ?>
+      <?php if (file_exists(MERGED_LOG_FILE)): ?>
+        <br>🔄 Neural Sync: Active (<?= count(json_decode(file_get_contents(MERGED_LOG_FILE), true)) ?> merged entries)
+      <?php endif; ?>
     <?php else: ?>
       ⚠️ Echo Reflection Inactive — No entries found. Initial glyph required to activate bridge.
     <?php endif; ?>
@@ -373,7 +423,8 @@ Content-Type: application/json
 
 {
   "title": "New Title",
-  "subline": "New Subline Text"
+  "subline": "New Subline Text",
+  "theme": "Optional Theme"
 }</pre>
 
     <h3>Delete Entry</h3>
@@ -403,6 +454,14 @@ Content-Type: application/json
       "elements": ["c", "d"]
     }
   ]
+}</pre>
+
+    <h3>Export Data</h3>
+    <pre>POST /glyphbook.php
+Content-Type: application/json
+
+{
+  "action": "export"
 }</pre>
   </div>
 

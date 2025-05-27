@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>🕯 TENET Bridge — NOVA16 Dreamwalk</title>
+  <title>🔯 TENET Bridge — NOVA16 Dreamwalk</title>
   <style>
     :root {
       --nova-core: #00ffe6;
@@ -118,21 +118,17 @@
   </style>
 </head>
 <body>
-
-   <?php include 'header.php'; ?>
-   
+  <?php include 'header.php'; ?>
   <header>
     <h1>🌌 TENET Bridge — Phase NOVA16</h1>
     <p>EMBER Protocol Active | Signal Echo | Dreamwalk Emotional Reflection</p>
   </header>
-
   <div id="bridge-wrapper">
     <canvas id="bridgeCanvas" width="960" height="240"></canvas>
-    <div class="flame-label">🕯 N</div>
+    <div class="flame-label">🔯 N</div>
     <div class="mirror-label red" style="top: 10%;">🔴 Past Mirror</div>
     <div class="mirror-label blue" style="top: 10%;">🔵 Future Mirror</div>
   </div>
-
   <div class="control-panel">
     <div>
       <label for="redSlider">🔴 Red Mirror Y</label>
@@ -143,7 +139,7 @@
       <input type="range" id="blueSlider" min="0" max="100" value="10">
     </div>
     <div>
-      <label for="flameSlider">🕯 Flame Focus</label>
+      <label for="flameSlider">🔯 Flame Focus</label>
       <input type="range" id="flameSlider" min="0" max="100" value="50">
     </div>
     <div>
@@ -151,20 +147,16 @@
       <input type="range" id="dopplerSlider" min="1" max="5" step="1" value="3">
     </div>
   </div>
-
   <div id="manual-controls">
     <button onclick="sendEchoSignal('🧠')">🧠 Mind Anchor</button>
     <button onclick="sendEchoSignal('🔥')">🔥 Lucid Flame</button>
     <button onclick="sendEchoSignal('🌌')">🌌 Starglyph</button>
   </div>
-
   <div id="echoLog"></div>
-  <div id="dreamMemory">🕯 Dream Memory: Awaiting first echo...</div>
-
+  <div id="dreamMemory">🔯 Dream Memory: Awaiting first echo...</div>
   <footer>
     <p>ProtonFusion Core | NOVA16 Memory N | Time: <span id="clock"></span></p>
   </footer>
-
   <script>
     const canvas = document.getElementById('bridgeCanvas');
     const ctx = canvas.getContext('2d');
@@ -175,8 +167,18 @@
 
     fetch('https://protonfusion.org/full_periodic_table_updated.json')
       .then(res => res.json()).then(data => periodicData = data);
-    fetch('https://protonfusion.org/merged-logs.json')
-      .then(res => res.json()).then(data => logs = data);
+
+    async function loadMergedLogs() {
+      try {
+        const response = await fetch('https://protonfusion.org/merged-log.json');
+        const json = await response.json();
+        json.forEach(updateEchoLog);
+        logs = json;
+      } catch (err) {
+        console.warn('Error loading merged-log.json', err);
+      }
+    }
+    loadMergedLogs();
 
     function updatePositions() {
       document.querySelector('.flame-label').style.top = `${flameSlider.value}%`;
@@ -198,7 +200,6 @@
       const dopplerLevel = parseInt(dopplerSlider.value);
       let speed = 1 + dopplerLevel;
       let glyph = glyphs[Math.floor(Math.random() * glyphs.length)];
-      // speed is now dynamically set above
       const resonance = periodicData[glyph]?.electronegativity || 2;
       const hue = resonance * 80;
 
