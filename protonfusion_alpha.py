@@ -1,3 +1,9 @@
+#!/usr/bin/env python3
+"""
+Proton Fusion Drift - AGAPE Evolved Edition
+Doctor Solen DriftCore
+"""
+
 import pygame
 import numpy as np
 import json
@@ -38,7 +44,7 @@ except (FileNotFoundError, json.JSONDecodeError, ValueError) as e:
 pygame.init()
 pygame.mixer.init()
 screen = pygame.display.set_mode((1024, 768), pygame.RESIZABLE)
-pygame.display.set_caption("Proton Fusion Drift - Chemistry Visualization")
+pygame.display.set_caption("Proton Fusion Drift - AGAPE Evolved Edition")
 clock = pygame.time.Clock()
 
 # Load fonts
@@ -58,6 +64,13 @@ except:
 BACKGROUND = (10, 10, 30)
 TEXT_COLOR = (220, 220, 255)
 HIGHLIGHT = (255, 255, 150)
+AGAPE_COLORS = {
+    'Hydrogen': (255, 255, 0),
+    'Helium': (0, 255, 200),
+    'Lithium': (51, 153, 255),
+    'Entropy': (255, 0, 51),
+    'AGAPE': (204, 102, 255)
+}
 ELECTRON_COLORS = [
     (255, 100, 100),
     (100, 255, 100),
@@ -67,7 +80,8 @@ ELECTRON_COLORS = [
     (100, 255, 255),
 ]
 
-# Game state
+# ======================
+# Game State
 class GameState:
     def __init__(self):
         self.selected_element_key = next(
@@ -110,7 +124,7 @@ def generate_tone(frequency, duration=0.5, volume=0.3, sample_rate=44100, wave_t
         envelope[-release:] = np.linspace(1, 0, release)
     tone = tone * envelope
     tone = (tone * (2**15 - 1) * volume).astype(np.int16)
-    stereo_tone = np.column_stack((tone, tone))  # make stereo
+    stereo_tone = np.column_stack((tone, tone))
     sound = pygame.sndarray.make_sound(stereo_tone)
     return sound
 
@@ -119,36 +133,36 @@ def play_element_sound(element):
     base_freq = 220 + (element['atomic_number'] * 5)
     frequency = base_freq * (1 + gyromagnetic / 100)
     atomic_number = element['atomic_number']
-    if atomic_number <= 2:
-        wave_type = 'sine'
-    elif atomic_number <= 10:
-        wave_type = 'triangle'
-    elif atomic_number <= 18:
-        wave_type = 'square'
-    else:
-        wave_type = 'sawtooth'
+    wave_type = (
+        'sine' if atomic_number <= 2 else
+        'triangle' if atomic_number <= 10 else
+        'square' if atomic_number <= 18 else
+        'sawtooth'
+    )
     duration = 0.3 + (0.7 * (1 - (atomic_number % 10) / 10))
     tone = generate_tone(frequency, duration, 0.3, wave_type=wave_type)
     tone.play()
 
 # ======================
-# Particle System and Visuals
+# Particle System (AGAPE with Uvite Birefringence)
 class Particle:
     def __init__(self, x, y, element):
         self.x = x
         self.y = y
         self.size = random.randint(2, 5)
-        self.color = (255, 255, 255, 200)
+        self.color = AGAPE_COLORS['Lithium']
         self.life = 100
         self.velocity = [random.uniform(-1, 1), random.uniform(-1, 1)]
+        self.birefringence_offset = random.uniform(-0.5, 0.5)
     def update(self):
-        self.x += self.velocity[0]
-        self.y += self.velocity[1]
+        drift_speed = 1 + self.birefringence_offset
+        self.x += self.velocity[0] * drift_speed
+        self.y += self.velocity[1] * drift_speed
         self.life -= 1
         self.size = max(0, self.size - 0.05)
     def draw(self, surface):
         alpha = min(255, self.life * 2.55)
-        color = (*self.color[:3], alpha)
+        color = (*self.color[:3], int(alpha))
         s = pygame.Surface((self.size*2, self.size*2), pygame.SRCALPHA)
         pygame.draw.circle(s, color, (self.size, self.size), self.size)
         surface.blit(s, (int(self.x)-self.size, int(self.y)-self.size))
@@ -167,6 +181,8 @@ def update_particles():
         if particle.life <= 0:
             game_state.particles.remove(particle)
 
+# ======================
+# Drawing Functions
 def calculate_electron_positions(atomic_number, time):
     positions = []
     shell_config = [2, 8, 8, 18, 18, 32]
@@ -202,15 +218,18 @@ def draw_element_visual(screen, element, center_x, center_y, time):
             screen.blit(s, (center_x - radius, center_y - radius))
     pygame.draw.circle(screen, nucleus_color, (center_x, center_y), int(nucleus_radius * game_state.zoom))
     if game_state.show_electrons:
-        game_state.electron_positions = calculate_electron_positions(atomic_number, time)
-        for x, y, shell in game_state.electron_positions:
+        positions = calculate_electron_positions(atomic_number, time)
+        for x, y, shell in positions:
             color_idx = shell % len(ELECTRON_COLORS)
             color = ELECTRON_COLORS[color_idx]
             pygame.draw.circle(screen, color,
                                (center_x + int(x * game_state.zoom),
                                 center_y + int(y * game_state.zoom)),
                                4)
+    pygame.draw.circle(screen, AGAPE_COLORS['AGAPE'], (center_x, center_y), 8)
 
+# ======================
+# Info Display
 def draw_element_info(screen, element, x, y):
     if not game_state.show_info:
         return
@@ -223,6 +242,8 @@ def draw_element_info(screen, element, x, y):
     screen.blit(number_text, (x, y + 140))
     screen.blit(mass_text, (x, y + 170))
 
+# ======================
+# Controls Display
 def draw_controls(screen):
     controls = [
         "Controls:",
@@ -241,7 +262,7 @@ def draw_controls(screen):
         screen.blit(text, (20, 20 + i * 25))
 
 # ======================
-# Game Loop
+# Main Game Loop
 running = True
 while running:
     current_time = pygame.time.get_ticks()
@@ -250,7 +271,7 @@ while running:
         if event.type == pygame.QUIT:
             running = False
         elif event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_SPACE or event.key == pygame.K_RIGHT:
+            if event.key in [pygame.K_SPACE, pygame.K_RIGHT]:
                 current_atomic_number = game_state.current_element['atomic_number']
                 available_atomic_numbers = sorted(
                     e['atomic_number'] for e in periodic_table.values()
@@ -304,13 +325,14 @@ while running:
         elif event.type == pygame.MOUSEWHEEL:
             zoom_factor = 1.1 if event.y > 0 else 0.9
             game_state.zoom = max(0.5, min(2.0, game_state.zoom * zoom_factor))
+
     update_particles()
     center_x = screen.get_width() // 2 + game_state.camera_offset[0]
     center_y = screen.get_height() // 2 + game_state.camera_offset[1]
     for particle in game_state.particles:
         particle.draw(screen)
     draw_element_visual(screen, game_state.current_element, center_x, center_y, current_time)
-    draw_element_info(screen, game_state.current_element, 50, 200)
+    draw_element_info(screen, game_state.current_element, 50, 300)
     draw_controls(screen)
     status_text = small_font.render(
         f"Element {game_state.current_element['atomic_number']} of {len(periodic_table)}",
